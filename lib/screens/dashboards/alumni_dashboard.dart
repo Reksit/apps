@@ -5,7 +5,7 @@ import '../../providers/auth_provider.dart';
 import '../../utils/app_theme.dart';
 import '../../widgets/dashboard_app_bar.dart';
 import '../../widgets/dashboard_drawer.dart';
-import '../../widgets/stats_card.dart';
+import '../../widgets/feature_tile.dart';
 import '../features/alumni_profile_screen.dart';
 import '../features/alumni_directory_screen.dart';
 import '../features/job_board_screen.dart';
@@ -22,51 +22,11 @@ class AlumniDashboard extends StatefulWidget {
 }
 
 class _AlumniDashboardState extends State<AlumniDashboard> {
-  int _selectedIndex = 0;
-
-  final List<DashboardTab> _tabs = [
-    DashboardTab(
-      title: 'Profile',
-      icon: Icons.person_outlined,
-      selectedIcon: Icons.person,
-      screen: const AlumniProfileScreen(),
-    ),
-    DashboardTab(
-      title: 'Directory',
-      icon: Icons.people_outlined,
-      selectedIcon: Icons.people,
-      screen: const AlumniDirectoryScreen(),
-    ),
-    DashboardTab(
-      title: 'Jobs',
-      icon: Icons.work_outlined,
-      selectedIcon: Icons.work,
-      screen: const JobBoardScreen(),
-    ),
-    DashboardTab(
-      title: 'Events',
-      icon: Icons.event_outlined,
-      selectedIcon: Icons.event,
-      screen: const EventsScreen(),
-    ),
-    DashboardTab(
-      title: 'Request Event',
-      icon: Icons.add_circle_outlined,
-      selectedIcon: Icons.add_circle,
-      screen: const AlumniEventRequestScreen(),
-    ),
-    DashboardTab(
-      title: 'Messages',
-      icon: Icons.chat_outlined,
-      selectedIcon: Icons.chat,
-      screen: const UserChatScreen(),
-    ),
-  ];
-
-  void _onTabSelected(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  void _navigateToFeature(Widget screen) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => screen),
+    );
   }
 
   @override
@@ -87,13 +47,14 @@ class _AlumniDashboardState extends State<AlumniDashboard> {
           );
         },
       ),
-      body: Column(
-        children: [
-          // Welcome Section
-          if (_selectedIndex == 0) ...[
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Welcome Section
             Container(
               width: double.infinity,
-              margin: const EdgeInsets.all(16),
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
@@ -131,97 +92,72 @@ class _AlumniDashboardState extends State<AlumniDashboard> {
                 ],
               ),
             ),
+            const SizedBox(height: 24),
             
-            // Quick Stats
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: StatsCard(
-                      title: 'Network',
-                      value: '25',
-                      subtitle: 'Connections',
-                      icon: Icons.people,
-                      color: AppTheme.primaryColor,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: StatsCard(
-                      title: 'Mentoring',
-                      value: '8',
-                      subtitle: 'Students Helped',
-                      icon: Icons.school,
-                      color: AppTheme.successColor,
-                    ),
-                  ),
-                ],
+            // Features Grid
+            Text(
+              'Features',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: StatsCard(
-                      title: 'Opportunities',
-                      value: '3',
-                      subtitle: 'Jobs Posted',
-                      icon: Icons.work,
-                      color: AppTheme.accentColor,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: StatsCard(
-                      title: 'Events',
-                      value: '2',
-                      subtitle: 'Organized',
-                      icon: Icons.event,
-                      color: AppTheme.warningColor,
-                    ),
-                  ),
-                ],
-              ),
+            const SizedBox(height: 16),
+            
+            GridView.count(
+              crossAxisCount: 2,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              childAspectRatio: 1.1,
+              children: [
+                FeatureTile(
+                  title: 'My Profile',
+                  subtitle: 'Manage your profile',
+                  icon: Icons.person,
+                  color: AppTheme.secondaryColor,
+                  onTap: () => _navigateToFeature(const AlumniProfileScreen()),
+                ),
+                FeatureTile(
+                  title: 'Alumni Directory',
+                  subtitle: 'Connect with alumni',
+                  icon: Icons.people,
+                  color: AppTheme.primaryColor,
+                  onTap: () => _navigateToFeature(const AlumniDirectoryScreen()),
+                ),
+                FeatureTile(
+                  title: 'Job Board',
+                  subtitle: 'Post & view jobs',
+                  icon: Icons.work,
+                  color: AppTheme.accentColor,
+                  onTap: () => _navigateToFeature(const JobBoardScreen()),
+                ),
+                FeatureTile(
+                  title: 'Events',
+                  subtitle: 'Campus events',
+                  icon: Icons.event,
+                  color: AppTheme.warningColor,
+                  onTap: () => _navigateToFeature(const EventsScreen()),
+                ),
+                FeatureTile(
+                  title: 'Request Event',
+                  subtitle: 'Organize events',
+                  icon: Icons.add_circle,
+                  color: AppTheme.successColor,
+                  onTap: () => _navigateToFeature(const AlumniEventRequestScreen()),
+                ),
+                FeatureTile(
+                  title: 'Messages',
+                  subtitle: 'Chat with community',
+                  icon: Icons.chat,
+                  color: AppTheme.primaryColor,
+                  onTap: () => _navigateToFeature(const UserChatScreen()),
+                ),
+              ],
             ),
           ],
-          
-          // Tab Content
-          Expanded(
-            child: _tabs[_selectedIndex].screen,
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onTabSelected,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: AppTheme.secondaryColor,
-        unselectedItemColor: AppTheme.textTertiaryColor,
-        selectedFontSize: 12,
-        unselectedFontSize: 12,
-        items: _tabs.map((tab) => BottomNavigationBarItem(
-          icon: Icon(tab.icon),
-          activeIcon: Icon(tab.selectedIcon),
-          label: tab.title,
-        )).toList(),
+        ),
       ),
     );
   }
-}
-
-class DashboardTab {
-  final String title;
-  final IconData icon;
-  final IconData selectedIcon;
-  final Widget screen;
-
-  DashboardTab({
-    required this.title,
-    required this.icon,
-    required this.selectedIcon,
-    required this.screen,
-  });
 }

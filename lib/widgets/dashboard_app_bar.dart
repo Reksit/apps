@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../models/user.dart';
-import '../providers/auth_provider.dart';
 import '../utils/app_theme.dart';
 import '../widgets/notification_bell.dart';
+import '../screens/features/user_profile_screen.dart';
 
 class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -29,10 +28,17 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
         const NotificationBell(),
         const SizedBox(width: 8),
         
-        // User Avatar
+        // User Avatar - Opens Profile
         GestureDetector(
           onTap: () {
-            Scaffold.of(context).openDrawer();
+            if (user != null) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserProfileScreen(user: user!),
+                ),
+              );
+            }
           },
           child: Container(
             margin: const EdgeInsets.only(right: 16),

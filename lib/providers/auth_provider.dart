@@ -28,16 +28,12 @@ class AuthProvider with ChangeNotifier {
       final userJson = prefs.getString(AppConstants.userKey);
 
       if (token != null && userJson != null) {
-        // Check if token is expired
         if (_isTokenValid(token)) {
           _token = token;
           _user = User.fromJson(json.decode(userJson));
           _isAuthenticated = true;
-          
-          // Set token in API service
           ApiService.setAuthToken(token);
         } else {
-          // Token expired, clear storage
           await _clearStoredAuth();
         }
       }
@@ -82,10 +78,7 @@ class AuthProvider with ChangeNotifier {
       );
       _isAuthenticated = true;
 
-      // Store in local storage
       await _storeAuth();
-      
-      // Set token in API service
       ApiService.setAuthToken(_token!);
       
     } catch (e) {
@@ -178,7 +171,6 @@ class AuthProvider with ChangeNotifier {
   Future<void> updateUserProfile(Map<String, dynamic> profileData) async {
     _setLoading(true);
     try {
-      // Update profile based on user role
       switch (_user?.role) {
         case 'STUDENT':
           await ApiService.updateStudentProfile(profileData);
@@ -191,7 +183,6 @@ class AuthProvider with ChangeNotifier {
           break;
       }
       
-      // Reload user data
       await _reloadUserData();
     } catch (e) {
       rethrow;

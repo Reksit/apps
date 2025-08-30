@@ -68,7 +68,7 @@ class AppTheme {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
     ),
     
     // Input Decoration Theme
@@ -111,29 +111,6 @@ class AppTheme {
       ),
     ),
     
-    // Text Button Theme
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        foregroundColor: primaryColor,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-    ),
-    
-    // Outlined Button Theme
-    outlinedButtonTheme: OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        foregroundColor: primaryColor,
-        side: const BorderSide(color: primaryColor),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-    ),
-    
     // Bottom Navigation Bar Theme
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: surfaceColor,
@@ -141,13 +118,6 @@ class AppTheme {
       unselectedItemColor: textTertiaryColor,
       type: BottomNavigationBarType.fixed,
       elevation: 8,
-    ),
-    
-    // Floating Action Button Theme
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: primaryColor,
-      foregroundColor: Colors.white,
-      elevation: 4,
     ),
   );
   
@@ -173,19 +143,6 @@ class AppTheme {
       onBackground: Colors.white,
       onError: Colors.white,
     ),
-    
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Color(0xFF1E293B),
-      foregroundColor: Colors.white,
-      elevation: 0,
-      centerTitle: false,
-      titleTextStyle: TextStyle(
-        color: Colors.white,
-        fontSize: 20,
-        fontWeight: FontWeight.w600,
-      ),
-      iconTheme: IconThemeData(color: Colors.white),
-    ),
   );
   
   // Helper method to create MaterialColor
@@ -210,7 +167,7 @@ class AppTheme {
   }
 }
 
-// Custom Colors for different user roles
+// Role Colors
 class RoleColors {
   static const Color student = Color(0xFF2563EB); // Blue
   static const Color professor = Color(0xFF059669); // Green
@@ -231,14 +188,4 @@ class RoleColors {
         return AppTheme.textTertiaryColor;
     }
   }
-}
-
-// Status Colors
-class StatusColors {
-  static const Color pending = Color(0xFFD97706); // Yellow-600
-  static const Color approved = Color(0xFF059669); // Green-600
-  static const Color rejected = Color(0xFFDC2626); // Red-600
-  static const Color active = Color(0xFF2563EB); // Blue-600
-  static const Color inactive = Color(0xFF6B7280); // Gray-500
-  static const Color completed = Color(0xFF7C3AED); // Purple-600
 }

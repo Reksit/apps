@@ -33,18 +33,8 @@ class AppConstants {
   static const Duration connectTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);
   
-  // File Upload
-  static const int maxFileSize = 10 * 1024 * 1024; // 10MB
-  static const List<String> allowedFileTypes = ['pdf', 'doc', 'docx'];
-  
-  // Pagination
-  static const int defaultPageSize = 20;
-  
   // College Email Domain
   static const String collegeEmailDomain = '@stjosephstechnology.ac.in';
-  
-  // User Roles
-  static const List<String> userRoles = ['STUDENT', 'PROFESSOR', 'ALUMNI', 'MANAGEMENT'];
   
   // Departments
   static const List<String> departments = [
@@ -54,22 +44,6 @@ class AppConstants {
     'Mechanical Engineering',
     'Civil Engineering',
     'Electrical Engineering',
-  ];
-  
-  // Job Types
-  static const List<String> jobTypes = ['FULL_TIME', 'PART_TIME', 'INTERNSHIP', 'CONTRACT'];
-  
-  // Event Types
-  static const List<String> eventTypes = [
-    'Workshop',
-    'Seminar',
-    'Networking',
-    'Reunion',
-    'Career Fair',
-    'Industry Talk',
-    'Panel Discussion',
-    'Alumni Meet',
-    'Other'
   ];
   
   // Assessment Domains

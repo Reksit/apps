@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
 
 import 'providers/auth_provider.dart';
@@ -13,7 +12,6 @@ import 'screens/dashboards/student_dashboard.dart';
 import 'screens/dashboards/professor_dashboard.dart';
 import 'screens/dashboards/alumni_dashboard.dart';
 import 'screens/dashboards/management_dashboard.dart';
-import 'screens/profile/user_profile_screen.dart';
 import 'utils/app_theme.dart';
 import 'services/api_service.dart';
 
@@ -43,89 +41,54 @@ class SmartAssessmentApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => ConnectivityProvider()),
       ],
-      child: Consumer<ThemeProvider>(
-        builder: (context, themeProvider, child) {
-          return MaterialApp.router(
+      child: Consumer2<AuthProvider, ThemeProvider>(
+        builder: (context, authProvider, themeProvider, child) {
+          return MaterialApp(
             title: 'Smart Assessment System',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: themeProvider.themeMode,
-            routerConfig: _router,
+            home: _getInitialScreen(authProvider),
+            routes: {
+              '/login': (context) => const LoginScreen(),
+              '/register': (context) => const RegisterScreen(),
+              '/verify-otp': (context) => const VerifyOTPScreen(email: ''),
+              '/student': (context) => const StudentDashboard(),
+              '/professor': (context) => const ProfessorDashboard(),
+              '/alumni': (context) => const AlumniDashboard(),
+              '/management': (context) => const ManagementDashboard(),
+            },
           );
         },
       ),
     );
   }
+
+  Widget _getInitialScreen(AuthProvider authProvider) {
+    if (authProvider.isLoading) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (!authProvider.isAuthenticated) {
+      return const LoginScreen();
+    }
+
+    switch (authProvider.user?.role) {
+      case 'STUDENT':
+        return const StudentDashboard();
+      case 'PROFESSOR':
+        return const ProfessorDashboard();
+      case 'ALUMNI':
+        return const AlumniDashboard();
+      case 'MANAGEMENT':
+        return const ManagementDashboard();
+      default:
+        return const LoginScreen();
+    }
+  }
 }
-
-final GoRouter _router = GoRouter(
-  initialLocation: '/login',
-  routes: [
-    GoRoute(
-      path: '/login',
-      builder: (context, state) => const LoginScreen(),
-    ),
-    GoRoute(
-      path: '/register',
-      builder: (context, state) => const RegisterScreen(),
-    ),
-    GoRoute(
-      path: '/verify-otp',
-      builder: (context, state) => VerifyOTPScreen(
-        email: state.extra as String? ?? '',
-      ),
-    ),
-    GoRoute(
-      path: '/student',
-      builder: (context, state) => const StudentDashboard(),
-    ),
-    GoRoute(
-      path: '/professor',
-      builder: (context, state) => const ProfessorDashboard(),
-    ),
-    GoRoute(
-      path: '/alumni',
-      builder: (context, state) => const AlumniDashboard(),
-    ),
-    GoRoute(
-      path: '/management',
-      builder: (context, state) => const ManagementDashboard(),
-    ),
-    GoRoute(
-      path: '/profile/:userId',
-      builder: (context, state) => UserProfileScreen(
-        userId: state.pathParameters['userId']!,
-      ),
-    ),
-  ],
-  redirect: (context, state) {
-    final authProvider = context.read<AuthProvider>();
-    final isLoggedIn = authProvider.isAuthenticated;
-    final isLoggingIn = state.matchedLocation == '/login' || 
-                       state.matchedLocation == '/register' || 
-                       state.matchedLocation == '/verify-otp';
-
-    if (!isLoggedIn && !isLoggingIn) {
-      return '/login';
-    }
-    
-    if (isLoggedIn && isLoggingIn) {
-      final user = authProvider.user;
-      switch (user?.role) {
-        case 'STUDENT':
-          return '/student';
-        case 'PROFESSOR':
-          return '/professor';
-        case 'ALUMNI':
-          return '/alumni';
-        case 'MANAGEMENT':
-          return '/management';
-        default:
-          return '/login';
-      }
-    }
-    
-    return null;
-  },
-);

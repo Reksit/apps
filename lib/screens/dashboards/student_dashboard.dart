@@ -5,7 +5,7 @@ import '../../providers/auth_provider.dart';
 import '../../utils/app_theme.dart';
 import '../../widgets/dashboard_app_bar.dart';
 import '../../widgets/dashboard_drawer.dart';
-import '../../widgets/stats_card.dart';
+import '../../widgets/feature_tile.dart';
 import '../features/ai_assessment_screen.dart';
 import '../features/class_assessments_screen.dart';
 import '../features/task_management_screen.dart';
@@ -26,75 +26,11 @@ class StudentDashboard extends StatefulWidget {
 }
 
 class _StudentDashboardState extends State<StudentDashboard> {
-  int _selectedIndex = 0;
-
-  final List<DashboardTab> _tabs = [
-    DashboardTab(
-      title: 'Profile',
-      icon: Icons.person_outlined,
-      selectedIcon: Icons.person,
-      screen: const StudentProfileScreen(),
-    ),
-    DashboardTab(
-      title: 'Resume',
-      icon: Icons.description_outlined,
-      selectedIcon: Icons.description,
-      screen: const ResumeManagerScreen(),
-    ),
-    DashboardTab(
-      title: 'AI Practice',
-      icon: Icons.psychology_outlined,
-      selectedIcon: Icons.psychology,
-      screen: const AIAssessmentScreen(),
-    ),
-    DashboardTab(
-      title: 'Assessments',
-      icon: Icons.quiz_outlined,
-      selectedIcon: Icons.quiz,
-      screen: const ClassAssessmentsScreen(),
-    ),
-    DashboardTab(
-      title: 'Tasks',
-      icon: Icons.task_outlined,
-      selectedIcon: Icons.task,
-      screen: const TaskManagementScreen(),
-    ),
-    DashboardTab(
-      title: 'Events',
-      icon: Icons.event_outlined,
-      selectedIcon: Icons.event,
-      screen: const EventsScreen(),
-    ),
-    DashboardTab(
-      title: 'Jobs',
-      icon: Icons.work_outlined,
-      selectedIcon: Icons.work,
-      screen: const JobBoardScreen(),
-    ),
-    DashboardTab(
-      title: 'Alumni',
-      icon: Icons.school_outlined,
-      selectedIcon: Icons.school,
-      screen: const AlumniDirectoryScreen(),
-    ),
-    DashboardTab(
-      title: 'AI Chat',
-      icon: Icons.smart_toy_outlined,
-      selectedIcon: Icons.smart_toy,
-      screen: const AIChatScreen(),
-    ),
-    DashboardTab(
-      title: 'Messages',
-      icon: Icons.chat_outlined,
-      selectedIcon: Icons.chat,
-      screen: const UserChatScreen(),
-    ),
-  ];
-
-  void _onTabSelected(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  void _navigateToFeature(Widget screen) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => screen),
+    );
   }
 
   @override
@@ -115,13 +51,14 @@ class _StudentDashboardState extends State<StudentDashboard> {
           );
         },
       ),
-      body: Column(
-        children: [
-          // Welcome Section
-          if (_selectedIndex == 0) ...[
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Welcome Section
             Container(
               width: double.infinity,
-              margin: const EdgeInsets.all(16),
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
@@ -159,97 +96,100 @@ class _StudentDashboardState extends State<StudentDashboard> {
                 ],
               ),
             ),
+            const SizedBox(height: 24),
             
-            // Quick Stats
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: StatsCard(
-                      title: 'AI Assessments',
-                      value: '12',
-                      subtitle: 'Completed',
-                      icon: Icons.psychology,
-                      color: AppTheme.primaryColor,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: StatsCard(
-                      title: 'Class Tests',
-                      value: '8',
-                      subtitle: 'This Semester',
-                      icon: Icons.quiz,
-                      color: AppTheme.successColor,
-                    ),
-                  ),
-                ],
+            // Features Grid
+            Text(
+              'Features',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: StatsCard(
-                      title: 'Active Tasks',
-                      value: '5',
-                      subtitle: 'In Progress',
-                      icon: Icons.task,
-                      color: AppTheme.accentColor,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: StatsCard(
-                      title: 'Alumni Network',
-                      value: '150+',
-                      subtitle: 'Available',
-                      icon: Icons.people,
-                      color: AppTheme.secondaryColor,
-                    ),
-                  ),
-                ],
-              ),
+            const SizedBox(height: 16),
+            
+            GridView.count(
+              crossAxisCount: 2,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              childAspectRatio: 1.1,
+              children: [
+                FeatureTile(
+                  title: 'My Profile',
+                  subtitle: 'Manage your profile',
+                  icon: Icons.person,
+                  color: AppTheme.primaryColor,
+                  onTap: () => _navigateToFeature(const StudentProfileScreen()),
+                ),
+                FeatureTile(
+                  title: 'Resume Manager',
+                  subtitle: 'Upload & manage resumes',
+                  icon: Icons.description,
+                  color: AppTheme.accentColor,
+                  onTap: () => _navigateToFeature(const ResumeManagerScreen()),
+                ),
+                FeatureTile(
+                  title: 'AI Practice',
+                  subtitle: 'AI-powered assessments',
+                  icon: Icons.psychology,
+                  color: AppTheme.primaryColor,
+                  onTap: () => _navigateToFeature(const AIAssessmentScreen()),
+                ),
+                FeatureTile(
+                  title: 'Class Tests',
+                  subtitle: 'Professor assessments',
+                  icon: Icons.quiz,
+                  color: AppTheme.successColor,
+                  onTap: () => _navigateToFeature(const ClassAssessmentsScreen()),
+                ),
+                FeatureTile(
+                  title: 'Task Manager',
+                  subtitle: 'AI roadmaps & goals',
+                  icon: Icons.task,
+                  color: AppTheme.warningColor,
+                  onTap: () => _navigateToFeature(const TaskManagementScreen()),
+                ),
+                FeatureTile(
+                  title: 'Events',
+                  subtitle: 'Campus events',
+                  icon: Icons.event,
+                  color: AppTheme.secondaryColor,
+                  onTap: () => _navigateToFeature(const EventsScreen()),
+                ),
+                FeatureTile(
+                  title: 'Job Board',
+                  subtitle: 'Career opportunities',
+                  icon: Icons.work,
+                  color: AppTheme.accentColor,
+                  onTap: () => _navigateToFeature(const JobBoardScreen()),
+                ),
+                FeatureTile(
+                  title: 'Alumni Network',
+                  subtitle: 'Connect with alumni',
+                  icon: Icons.school,
+                  color: AppTheme.secondaryColor,
+                  onTap: () => _navigateToFeature(const AlumniDirectoryScreen()),
+                ),
+                FeatureTile(
+                  title: 'AI Assistant',
+                  subtitle: 'Chat with AI',
+                  icon: Icons.smart_toy,
+                  color: AppTheme.primaryColor,
+                  onTap: () => _navigateToFeature(const AIChatScreen()),
+                ),
+                FeatureTile(
+                  title: 'Messages',
+                  subtitle: 'Chat with peers',
+                  icon: Icons.chat,
+                  color: AppTheme.successColor,
+                  onTap: () => _navigateToFeature(const UserChatScreen()),
+                ),
+              ],
             ),
           ],
-          
-          // Tab Content
-          Expanded(
-            child: _tabs[_selectedIndex].screen,
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onTabSelected,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: AppTheme.primaryColor,
-        unselectedItemColor: AppTheme.textTertiaryColor,
-        selectedFontSize: 12,
-        unselectedFontSize: 12,
-        items: _tabs.take(5).map((tab) => BottomNavigationBarItem(
-          icon: Icon(tab.icon),
-          activeIcon: Icon(tab.selectedIcon),
-          label: tab.title,
-        )).toList(),
+        ),
       ),
     );
   }
-}
-
-class DashboardTab {
-  final String title;
-  final IconData icon;
-  final IconData selectedIcon;
-  final Widget screen;
-
-  DashboardTab({
-    required this.title,
-    required this.icon,
-    required this.selectedIcon,
-    required this.screen,
-  });
 }
