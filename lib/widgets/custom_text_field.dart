@@ -20,6 +20,7 @@ class CustomTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final bool enabled;
   final TextInputAction? textInputAction;
+  final TextInputAction? textInputAction;
 
   const CustomTextField({
     super.key,
@@ -38,6 +39,7 @@ class CustomTextField extends StatelessWidget {
     this.maxLength,
     this.inputFormatters,
     this.enabled = true,
+    this.textInputAction,
     this.textInputAction,
   });
 
@@ -66,6 +68,7 @@ class CustomTextField extends StatelessWidget {
           maxLength: maxLength,
           inputFormatters: inputFormatters,
           enabled: enabled,
+          textInputAction: textInputAction,
           textInputAction: textInputAction,
           style: Theme.of(context).textTheme.bodyLarge,
           decoration: InputDecoration(
