@@ -108,6 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   hint: 'Enter your college email',
                   keyboardType: TextInputType.emailAddress,
                   prefixIcon: Icons.email_outlined,
+                  textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
@@ -127,6 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   hint: 'Enter your password',
                   obscureText: _obscurePassword,
                   prefixIcon: Icons.lock_outlined,
+                  textInputAction: TextInputAction.done,
                   suffixIcon: IconButton(
                     icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
                     onPressed: () {
