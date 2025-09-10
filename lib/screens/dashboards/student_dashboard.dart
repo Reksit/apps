@@ -207,11 +207,11 @@ class _StudentDashboardState extends State<StudentDashboard> with TickerProvider
             controller: _scrollController,
             slivers: [
               // Welcome Section - with collapsing animation
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                height: _showWelcomeSection ? null : 0,
-                child: SliverToBoxAdapter(
+              SliverToBoxAdapter(
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  height: _showWelcomeSection ? null : 0,
                   child: AnimatedOpacity(
                     opacity: _showWelcomeSection ? 1.0 : 0.0,
                     duration: const Duration(milliseconds: 300),
